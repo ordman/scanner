@@ -1,8 +1,9 @@
 {
   "name": "@ordman/scanner",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "description": "Tool for reading data from barcode scanner (MDLP support)",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ordman/scanner.git"
