@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo page</title>
+    <script src="../dist/bundle.js"></script>
+    <style>
+        #scanner {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<label for="scanner">Let scan your barcode</label>
+<input id="scanner" type="text"/>
+
+<div class="barcode-info">
+
+</div>
+<script type="application/javascript">
+    const scanner = new MdlpScanner(document.getElementById('scanner'));
+    scanner.on('start', data => {
+        console.log('start', data);
+    }).on('success', data => {
+        console.log('success', data);
+    }).on('error', data => {
+        console.log('error', data);
+    });
+
+</script>
+</body>
+</html>
