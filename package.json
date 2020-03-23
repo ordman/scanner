@@ -1,6 +1,6 @@
 {
   "name": "@ordman/scanner",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "license": "MIT",
   "description": "Tool for reading data from barcode scanner (MDLP support)",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
     "webpack-cli": "^3.3.11"
   },
   "scripts": {
-    "build": "webpack --mode=production",
+    "build-browser": "webpack --mode=production",
     "build-module": "tsc",
     "test": "jest"
   },
