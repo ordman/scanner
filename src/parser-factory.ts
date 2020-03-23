@@ -1,6 +1,7 @@
 import {MdlpParser} from "./parsers/mdlp-parser";
-import {ScannerMode} from "./scanner";
+
 import {SimpleParser} from "./parsers/simple-parser";
+import {ScannerMode} from "./types";
 
 export class ParserFactory {
     static get(parser: ScannerMode) {

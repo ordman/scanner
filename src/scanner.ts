@@ -1,21 +1,12 @@
 import {ParserFactory} from "./parser-factory";
 import {Keyboard, ParserInterface} from "./parsers/parser-interface";
+import {ScannerEvent, ScannerMode} from "./types";
 
 interface Observable<T, K> {
     on(event: T, fn: K, options?: boolean | AddEventListenerOptions);
 }
 
 declare type Subscriber = (data: any) => {};
-
-export enum ScannerEvent {
-    start = 'start',
-    error = 'error',
-    success = 'success',
-}
-
-export enum ScannerMode {
-    mdlp = 'mdlp',
-}
 
 export class Scanner implements Observable<ScannerEvent, Subscriber> {
     private dirty: boolean = false;
@@ -28,7 +19,7 @@ export class Scanner implements Observable<ScannerEvent, Subscriber> {
     }
 
     on(event: ScannerEvent | string, fn: Subscriber, options?: boolean | AddEventListenerOptions): Scanner {
-        this.domNode.addEventListener(event, fn, options);
+        this.domNode.addEventListener(event, (ev: CustomEvent) => fn(ev.detail), options);
 
         return this;
     }

@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: './src/index.ts',
+    entry: './src/mdlp-scanner.ts',
     module: {
         rules: [
             {
@@ -17,8 +17,8 @@ module.exports = {
     },
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'es5'),
         libraryTarget: 'var',
-        library: 'MdlpScanner'
-    },
+        library: ['MedInTech', 'Barcode']
+    }
 };

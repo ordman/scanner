@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Demo page</title>
-    <script src="../dist/bundle.js"></script>
+    <script src="../es5/bundle.js"></script>
     <style>
         #scanner {
             width: 100%;
@@ -18,15 +18,16 @@
 
 </div>
 <script type="application/javascript">
-    const scanner = new MdlpScanner(document.getElementById('scanner'));
-    scanner.on('start', data => {
-        console.log('start', data);
-    }).on('success', data => {
-        console.log('success', data);
-    }).on('error', data => {
-        console.log('error', data);
-    });
-
+    {
+        const scanner = new MedInTech.Barcode.MdlpScanner(document.getElementById('scanner'));
+        scanner.on('start', data => {
+            console.log('start', data);
+        }).on('success', data => {
+            console.log('success', data);
+        }).on('error', data => {
+            console.log('error', data);
+        });
+    }
 </script>
 </body>
 </html>

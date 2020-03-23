@@ -1,0 +1,10 @@
+.idea
+node_modules
+src
+test
+.gitignore
+.npmignore
+jest.config.js
+tsconfig.json
+webpack.config.js
+yarn.lock

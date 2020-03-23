@@ -71,17 +71,28 @@ export class KizService {
         return btoa(binaryCode);
     }
 
+    static readonly map = {
+        from: 'ёйцукенгшщзхъфывапролджэячсмитьбю.ЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ.',
+        to: '`qwertyuiop[]asdfghjkl;\'zxcvbnm,./`QWERTYUIOP[]ASDFGHJKL;\'ZXCVBNM,./'
+    };
+
+    static convertToLatin(data: string) {
+        let $ = KizService;
+        return data.split('').map(s => !~$.map.from.indexOf(s) ? s : $.map.to[$.map.from.indexOf(s)]).join('');
+    }
+
     /**
      * String with endoding from scanner and GS replaced as ']'
      * @param data
      */
     makeSgtin(data: string): Kiz {
+        data = KizService.convertToLatin(data);
         const tokens1stage = data.split(KizService.SEPARATOR);
-        const tokens2stage = this.seperateOneTokenFromOther(tokens1stage, TokenId.GTIN, 16);
-        const tokens3stage = this.seperateOneTokenFromOther(tokens2stage, TokenId.SERIAL, 15);
-        const tokens4stage = this.seperateOneTokenFromOther(tokens3stage, TokenId.EXP_DATE, 8);
-        const tokens5stage = this.seperateOneTokenFromOther(tokens4stage, TokenId.CHECK_KEY, 6);
-        const tokens = this.seperateOneTokenFromOther(tokens5stage, TokenId.CRYPT_CODE, 46);
+        const tokens2stage = this.separateOneTokenFromOther(tokens1stage, TokenId.GTIN, 16);
+        const tokens3stage = this.separateOneTokenFromOther(tokens2stage, TokenId.SERIAL, 15);
+        const tokens4stage = this.separateOneTokenFromOther(tokens3stage, TokenId.EXP_DATE, 8);
+        const tokens5stage = this.separateOneTokenFromOther(tokens4stage, TokenId.CHECK_KEY, 6);
+        const tokens = this.separateOneTokenFromOther(tokens5stage, TokenId.CRYPT_CODE, 46);
         const kiz = this.fillSgtin(tokens);
         kiz.raw_data = KizService.createBinaryInBase64(data);
         return kiz;
@@ -122,17 +133,19 @@ export class KizService {
         return kiz;
     }
 
-    // seperate one token from others GTIN or EXP_DATE
-    seperateOneTokenFromOther(tokens: Array<string>, tokenId: TokenId.EXP_DATE | TokenId.GTIN | TokenId.CRYPT_CODE |
+    // separate one token from others GTIN or EXP_DATE
+    separateOneTokenFromOther(tokens: Array<string>, tokenId: TokenId.EXP_DATE | TokenId.GTIN | TokenId.CRYPT_CODE |
         TokenId.CHECK_KEY | TokenId.SERIAL, length: number): Array<string> {
+        let ret = [];
         tokens.forEach((token, index) => {
             if (KizService.getTokenId(token) === tokenId && token.length > length) {
-                tokens.splice(index, 1);
-                tokens.push(token.substring(0, length));
-                tokens.push(token.substring(length));
+                ret.push(token.substring(0, length));
+                ret.push(token.substring(length));
+            } else {
+                ret.push(token);
             }
         });
-        return tokens;
+        return ret;
     }
 
     // detect string and return Kiz
