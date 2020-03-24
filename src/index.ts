@@ -1,1 +1,2 @@
-export {KizService, Kiz, KizType, MdlpParser, NoKiz, SgtinKiz, SsccKiz, TokenId} from './parsers/mdlp-parser';
+export {MdlpScanner} from './mdlp-scanner';
+export {NoKiz, SgtinKiz, SsccKiz, KizType, Kiz} from './parsers/types'

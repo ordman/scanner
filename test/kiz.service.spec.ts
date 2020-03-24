@@ -1,4 +1,6 @@
-import {KizService, KizType, SgtinKiz, SsccKiz, TokenId} from '../src/parsers/mdlp-parser';
+import {KizType, SgtinKiz, SsccKiz, TokenId} from '../src/parsers/types';
+import {KizService} from '../src/parsers/mdlp-parser';
+import {KeyboardChar} from "../src/parsers/parser-interface";
 
 // @ts-ignore
 global.btoa = function btoa(str) {
@@ -68,14 +70,14 @@ describe('KizService', () => {
 
     it('#separateOneTokenFromOther should find token for id 01(GTIN) and separate it from 2 id data and add it parts to tokens,' +
         'but found token must be deleted from array', () => {
-        const tokens = INPUT_DATA.split(KizService.SEPARATOR);
+        const tokens = INPUT_DATA.split(KeyboardChar.BracketRight);
         const result = service.separateOneTokenFromOther(tokens, TokenId.GTIN, 16);
         expect(result).toEqual(EXP_TOKENS_SEPARATE_GTIN);
     });
 
     it('#separateOneTokenFromOther should find token for id 17 and separate it from 2 id data and add it parts to tokens,' +
         'but found token must be deleted from array', () => {
-        const tokens = INPUT_DATA.split(KizService.SEPARATOR);
+        const tokens = INPUT_DATA.split(KeyboardChar.BracketRight);
         const stage1tokens = service.separateOneTokenFromOther(tokens, TokenId.GTIN, 16);
         const result = service.separateOneTokenFromOther(stage1tokens, TokenId.EXP_DATE, 8);
         expect(result).toEqual(EXP_TOKENS_SEPARATE_GTIN_BEFORE_EXP_DATE);

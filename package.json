@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build-browser": "webpack --mode=production",
-    "build-module": "tsc",
+    "build-module": "tsc --strict",
     "test": "jest"
   },
   "engines": {

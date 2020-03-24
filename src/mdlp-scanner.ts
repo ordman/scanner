@@ -1,8 +1,10 @@
 import {Scanner} from "./scanner";
-import {ScannerMode} from "./types";
+import {MdlpParser} from "./parsers/mdlp-parser";
+import {SgtinKiz, SsccKiz} from "./parsers/types";
 
-export class MdlpScanner extends Scanner {
-    constructor(selector) {
-        super(selector, ScannerMode.mdlp);
+export class MdlpScanner extends Scanner<SgtinKiz | SsccKiz> {
+
+    constructor(domNode: HTMLInputElement) {
+        super(domNode, new MdlpParser());
     }
 }

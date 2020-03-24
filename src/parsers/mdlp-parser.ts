@@ -1,73 +1,32 @@
-import {ParserInterface} from "./parser-interface";
+import {KeyboardChar, ParserInterface} from "./parser-interface";
+import {Kiz, KizType, SgtinKiz, SsccKiz, TokenId} from "./types";
 
-export class MdlpParser implements ParserInterface<any> {
+export class MdlpParser implements ParserInterface<Kiz> {
     private kiz: KizService;
 
     constructor() {
         this.kiz = new KizService();
     }
 
-    handle(buffer: string[]) {
+    handle(buffer: string[]): SgtinKiz | SsccKiz {
         return this.kiz.getKiz(buffer.join(''));
     }
 }
 
-export enum KizType {
-    NO,
-    SGTIN,
-    SSCC,
-}
-
-export enum TokenId {
-    GTIN = '01', // 14
-    SERIAL = '21', // 13
-    SSCC = '00',
-    TNVED_PART1 = '24',
-    TNVED_PART2 = '0',
-    BATCH = '10',
-    EXP_DATE = '17',
-    CHECK_KEY = '91', // 4
-    CRYPT_CODE = '92' // 44
-}
-
-export interface SgtinKiz {
-    type: KizType.SGTIN
-    gtin: string
-    serial: string
-    tnvd: string
-    batch: string
-    exp_date: string
-    raw_data: string
-}
-
-export interface SsccKiz {
-    type: KizType.SSCC
-    sscc: string
-}
-
-export interface NoKiz {
-    type: KizType.NO
-    err_msg: string
-}
-
-export type Kiz = SgtinKiz | SsccKiz | NoKiz;
-
 export class KizService {
-
-    static readonly SEPARATOR = ']';
 
     static getTokenId(token: string): string {
         return token.charAt(0) + token.charAt(1);
     }
 
     // parse sscc and return sscc clean string
-    static makeSscc(data: string): Kiz {
+    static makeSscc(data: string): SsccKiz {
         const sscc = data.substring(2);
         return {type: KizType.SSCC, sscc: sscc};
     }
 
     static createBinaryInBase64(kiz: string): string {
-        const binaryCode = kiz.split(KizService.SEPARATOR).join(String.fromCharCode(29));
+        const binaryCode = kiz.split(KeyboardChar.BracketRight).join(String.fromCharCode(29));
         return btoa(binaryCode);
     }
 
@@ -85,9 +44,9 @@ export class KizService {
      * String with endoding from scanner and GS replaced as ']'
      * @param data
      */
-    makeSgtin(data: string): Kiz {
+    makeSgtin(data: string): SgtinKiz {
         data = KizService.convertToLatin(data);
-        const tokens1stage = data.split(KizService.SEPARATOR);
+        const tokens1stage = data.split(KeyboardChar.BracketRight);
         const tokens2stage = this.separateOneTokenFromOther(tokens1stage, TokenId.GTIN, 16);
         const tokens3stage = this.separateOneTokenFromOther(tokens2stage, TokenId.SERIAL, 15);
         const tokens4stage = this.separateOneTokenFromOther(tokens3stage, TokenId.EXP_DATE, 8);
@@ -136,8 +95,8 @@ export class KizService {
     // separate one token from others GTIN or EXP_DATE
     separateOneTokenFromOther(tokens: Array<string>, tokenId: TokenId.EXP_DATE | TokenId.GTIN | TokenId.CRYPT_CODE |
         TokenId.CHECK_KEY | TokenId.SERIAL, length: number): Array<string> {
-        let ret = [];
-        tokens.forEach((token, index) => {
+        let ret: string[] = [];
+        tokens.forEach(token => {
             if (KizService.getTokenId(token) === tokenId && token.length > length) {
                 ret.push(token.substring(0, length));
                 ret.push(token.substring(length));
@@ -149,7 +108,7 @@ export class KizService {
     }
 
     // detect string and return Kiz
-    getKiz(str: string): Kiz {
+    getKiz(str: string): SgtinKiz | SsccKiz {
         const data = str.trim();
         const prefix = KizService.getTokenId(data);
         switch (prefix) {
