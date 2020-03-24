@@ -1,6 +1,6 @@
 {
   "name": "@ordman/scanner",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "description": "Tool for reading data from barcode scanner (MDLP support)",
   "main": "dist/index.js",
