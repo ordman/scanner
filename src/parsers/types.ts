@@ -2,6 +2,7 @@ export enum KizType {
     NO,
     SGTIN,
     SSCC,
+    GTIN
 }
 
 export enum TokenId {
