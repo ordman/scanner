@@ -1,4 +1,4 @@
-import {Keyboard, ParserInterface} from "./parsers/parser-interface";
+import {KeyboardChar, ParserInterface} from "./parsers/parser-interface";
 import {ScannerEvent} from "./types";
 
 interface Observable<T, K, Z> {
@@ -9,7 +9,7 @@ declare type Subscriber = (data: any) => void;
 
 export abstract class Scanner<T, K = string> implements Observable<ScannerEvent, Subscriber, T> {
     private dirty: boolean = false;
-    private buffer: string[] = [];
+    private buffer: number[] = [];
 
     protected constructor(protected domNode: HTMLInputElement, protected parser: ParserInterface<T>) {
         this.listen();
@@ -31,7 +31,8 @@ export abstract class Scanner<T, K = string> implements Observable<ScannerEvent,
                 this.dirty = true;
             }
 
-            if (event.code === Keyboard.Enter) {
+            // noinspection JSDeprecatedSymbols
+            if (event.charCode === KeyboardChar.CR) {
                 let detail;
                 try {
                     detail = this.parser.handle(this.buffer);
@@ -44,7 +45,8 @@ export abstract class Scanner<T, K = string> implements Observable<ScannerEvent,
                     this.clear();
                 }
             } else {
-                this.buffer.push(event.key);
+                // noinspection JSDeprecatedSymbols
+                this.buffer.push(event.charCode);
             }
         });
     }

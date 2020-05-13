@@ -1,12 +1,8 @@
 export enum KeyboardChar {
-    BracketRight = ']',
-}
-
-export enum Keyboard {
-    Enter = 'Enter',
-    BracketRight = 'BracketRight',
+    GS = 29,
+    CR = 13,
 }
 
 export interface ParserInterface<T> {
-    handle(buffer: string[]): T;
+    handle(buffer: number[]): T;
 }

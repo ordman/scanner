@@ -10,7 +10,8 @@
     "lib": [
       "DOM",
       "ES5",
-      "ScriptHost"
+      "ScriptHost",
+      "ESNext"
     ],
     "outDir": "./dist"
   },
