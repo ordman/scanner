@@ -36,6 +36,7 @@ export interface KizInterface {
 }
 
 export interface SgtinKiz extends KizInterface {
+    type: KizType.SGTIN
     gtin: string
     serial: string
     tnvd: string
@@ -46,10 +47,12 @@ export interface SgtinKiz extends KizInterface {
 }
 
 export interface SsccKiz extends KizInterface {
+    type: KizType.SSCC
     sscc: string
 }
 
 export interface NoKiz extends KizInterface {
+    type: KizType.NO
     err_msg: string
 }
 

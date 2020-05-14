@@ -1,6 +1,11 @@
 import {KeyboardChar, ParserInterface} from "./parser-interface";
 import {Kiz, KizInterface, KizType, SgtinKiz, SsccKiz, TokenId, TokenLength, TokenMaxLength} from "./types";
 
+enum ParseStage {
+    SearchToken,
+    ParseValue
+}
+
 export class MdlpParser implements ParserInterface<Kiz> {
 
     static readonly map = {
@@ -57,23 +62,25 @@ export class MdlpParser implements ParserInterface<Kiz> {
         const tokens: string[] = Object.values(TokenId);
         const tokenNames: string[] = Object.keys(TokenId);
         let tmp = '';
-        let charCode: number, tokenName: string = '', raw: string = '';
+        let charCode: number, tokenName: string = '', raw: string = '', stage: ParseStage = ParseStage.SearchToken;
         while (buffer.length > 0) {
             charCode = buffer.shift() as number;
             raw += String.fromCharCode(charCode);
             if (charCode !== KeyboardChar.GS) {
                 tmp += String.fromCharCode(charCode);
             }
-            let index = tokens.indexOf(tmp);
+            let index = stage === ParseStage.SearchToken ? tokens.indexOf(tmp) : -1;
             if ((charCode === KeyboardChar.GS || buffer.length === 0) && !!tokenName) {
                 kiz[tokenName.toLowerCase()] = tmp;
                 tmp = '';
+                stage = ParseStage.SearchToken;
                 continue;
             }
             if (
                 index >= 0 &&
                 (typeof TokenLength[tokenNames[index]] !== 'undefined' || typeof TokenMaxLength[tokenNames[index]] !== 'undefined')
             ) {
+                stage = ParseStage.ParseValue;
                 tokens.splice(index, 1).join('');
                 tokenName = tokenNames.splice(index, 1).join('');
                 tmp = '';
@@ -83,6 +90,7 @@ export class MdlpParser implements ParserInterface<Kiz> {
                 const bufferPart = buffer.splice(0, TokenLength[tokenName]);
                 kiz[tokenName.toLowerCase()] = bufferPart.map(i => String.fromCharCode(i)).join('');
                 raw += kiz[tokenName.toLowerCase()];
+                stage = ParseStage.SearchToken;
             }
 
         }
