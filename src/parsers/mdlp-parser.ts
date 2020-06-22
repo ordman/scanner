@@ -91,6 +91,7 @@ export class MdlpParser implements ParserInterface<Kiz> {
                 kiz[tokenName.toLowerCase()] = bufferPart.map(i => String.fromCharCode(i)).join('');
                 raw += kiz[tokenName.toLowerCase()];
                 stage = ParseStage.SearchToken;
+                tokenName = '';
             }
 
         }

@@ -67,6 +67,24 @@ describe('MdlpParser', () => {
         expect(result).toEqual(EXP_KIZ_GTIN);
     });
 
+
+    it('#handle ISENTRES SGTIN input', () => {
+        let barcode = '010467001246096121106HC7AH47H9391EE0692kozjqD86DCeXCdxsP95+bXmQ1wZyaOnLgZD/CgpUQ/A=';
+        let result = parser.handle(barcode.split('').map(i => i.charCodeAt(0)));
+        let expected: SgtinKiz = {
+            type: KizType.SGTIN,
+            gtin: '04670012460961',
+            serial: '106HC7AH47H93',
+            tnvd: '',
+            batch: '',
+            exp_date: '',
+            raw_data: 'MDEwNDY3MDAxMjQ2MDk2MTIxMTA2SEM3QUg0N0g5Mx05MUVFMDYdOTJrb3pqcUQ4NkRDZVhDZHhzUDk1K2JYbVExd1p5YU9uTGdaRC9DZ3BVUS9BPQ==',
+            check_key: 'EE06',
+            crypt_code: 'kozjqD86DCeXCdxsP95+bXmQ1wZyaOnLgZD/CgpUQ/A='
+        };
+        expect(result).toEqual(expected);
+    });
+
     it('#handle SGTIN (ru) input', () => {
         const result = parser.handle(INPUT_DATA_RU);
         expect(result).toEqual(EXP_KIZ_GTIN);
