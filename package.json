@@ -26,5 +26,9 @@
   },
   "engines": {
     "node": ">=0.8.x"
+  },
+  "dependencies": {
+    "custom-event-polyfill": "^1.0.7",
+    "object.values": "^1.1.1"
   }
 }
