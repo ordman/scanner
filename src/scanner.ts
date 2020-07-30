@@ -1,5 +1,6 @@
 import {KeyboardChar, ParserInterface} from "./parsers/parser-interface";
 import {ScannerEvent} from "./types";
+import 'custom-event-polyfill';
 
 interface Observable<T, K, Z> {
     on(event: T, fn: K, options?: boolean | AddEventListenerOptions): Scanner<Z>;
@@ -32,7 +33,7 @@ export abstract class Scanner<T, K = string> implements Observable<ScannerEvent,
             }
 
             // noinspection JSDeprecatedSymbols
-            if (event.charCode === KeyboardChar.CR) {
+            if (event.charCode === KeyboardChar.CR || event.charCode === KeyboardChar.LF) {
                 let detail;
                 try {
                     detail = this.parser.handle(this.buffer);
