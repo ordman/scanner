@@ -1,6 +1,5 @@
 import {KeyboardChar, ParserInterface} from "./parsers/parser-interface";
 import {ScannerEvent} from "./types";
-import 'custom-event-polyfill';
 
 interface Observable<T, K, Z> {
     on(event: T, fn: K, options?: boolean | AddEventListenerOptions): Scanner<Z>;

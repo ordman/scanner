@@ -1,11 +1,6 @@
 import {KeyboardChar, ParserInterface} from "./parser-interface";
 import {Kiz, KizInterface, KizType, SgtinKiz, SsccKiz, TokenId, TokenLength, TokenMaxLength} from "./types";
 
-const values = require('object.values');
-
-if (!Object.values) {
-    values.shim();
-}
 
 enum ParseStage {
     SearchToken,
